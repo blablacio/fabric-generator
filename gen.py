@@ -352,10 +352,10 @@ def createDockerFile(tab):
 def createGenNeeded(channelId, tab):
     orgNB = int((len(tab) - 2) / 2)
     index = 2
-    rslt = "function gen_needed(){\nmkdir channel-artifacts\nexport CHANNEL_NAME=" + channelId + "\nexport FABRIC_CFG_PATH=$PWD\n./cryptogen generate --config=./crypto-config.yaml\n./configtxgen -profile ProfileTest -outputBlock ./channel-artifacts/genesis.block\n"
-    rslt += "./configtxgen -profile ChannelTest -outputCreateChannelTx ./channel-artifacts/channel.tx   -channelID " + channelId
+    rslt = "function gen_needed(){\nmkdir channel-artifacts\nexport CHANNEL_NAME=" + channelId + "\nexport FABRIC_CFG_PATH=$PWD\ndocker run -v ${PWD}:/opt --rm hyperledger/fabric-tools cryptogen generate --config=/opt/crypto-config.yaml\ndocker run -v ${PWD}:/opt --rm hyperledger/fabric-tools configtxgen -profile ProfileTest -outputBlock /opt/channel-artifacts/genesis.block\n"
+    rslt += "docker run -v ${PWD}:/opt --rm hyperledger/fabric-tools configtxgen -profile ChannelTest -outputCreateChannelTx /opt/channel-artifacts/channel.tx   -channelID " + channelId
     for i in range (0, orgNB):
-        rslt += jumptab(1, 0) + "./configtxgen -profile ChannelTest -outputAnchorPeersUpdate ./channel-artifacts/" + tab[index] + "MSPanchors.tx -channelID " + channelId + " -asOrg " + tab[index]
+        rslt += jumptab(1, 0) + "docker run -v ${PWD}:/opt --rm hyperledger/fabric-tools configtxgen -profile ChannelTest -outputAnchorPeersUpdate /opt/channel-artifacts/" + tab[index] + "MSPanchors.tx -channelID " + channelId + " -asOrg " + tab[index]
         index += 2
     rslt += "\n"
     rslt += "}\n"
