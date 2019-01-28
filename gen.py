@@ -381,7 +381,7 @@ def createJoinChannel(tab, channelId):
 
 #Call functions in order to create launch.sh
 def createScript(tab):
-    buffer = "#!/bin/bash"
+    buffer = "#!/bin/bash\n"
     with open('.env', 'r') as env:
         for line in env:
             buffer += line
