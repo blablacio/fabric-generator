@@ -390,7 +390,7 @@ def createScript(tab):
 #Main function
 def createNewOrg():
     tab = getArg()
-    os.mkdir('config')
+    os.makedirs('config')
     os.chdir('config')
     script = open("launch.sh", "w")
     scriptBuffer = createScript(tab)
